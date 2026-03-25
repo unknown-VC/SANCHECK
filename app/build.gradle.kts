@@ -31,7 +31,7 @@ android {
         buildConfigField(
             "String",
             "ALADIN_TTB_KEY",
-            "\"${localProperties.getProperty("ALADIN_TTB_KEY", "ttbNsh04022108001")}\""
+            "\"${localProperties.getProperty("ALADIN_TTB_KEY", "")}\""
         )
     }
 
