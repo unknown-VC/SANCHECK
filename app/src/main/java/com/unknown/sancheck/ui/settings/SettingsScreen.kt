@@ -116,7 +116,7 @@ fun SettingsScreen(
                 Text("API 키 저장")
             }
 
-            HorizontalDivider()
+            Divider()
 
             // Excel
             Text("데이터 관리", style = MaterialTheme.typography.titleMedium)
@@ -139,7 +139,7 @@ fun SettingsScreen(
                 Text("Excel에서 가져오기 (.xlsx)")
             }
 
-            HorizontalDivider()
+            Divider()
 
             // App info
             Text("앱 정보", style = MaterialTheme.typography.titleMedium)

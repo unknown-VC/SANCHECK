@@ -206,7 +206,7 @@ fun BookDetailScreen(
                 Text("메모 저장")
             }
 
-            HorizontalDivider()
+            Divider()
 
             // Annotations section
             // PostIts
