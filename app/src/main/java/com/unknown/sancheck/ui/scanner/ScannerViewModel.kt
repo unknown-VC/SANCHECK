@@ -53,6 +53,7 @@ class ScannerViewModel(application: Application) : AndroidViewModel(application)
             // Look up on Aladin
             val ttbKey = prefsManager.ttbKey.ifEmpty { BuildConfig.ALADIN_TTB_KEY }
             if (ttbKey.isEmpty()) {
+                lastScannedIsbn = ""
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
                     error = "API 키가 설정되지 않았습니다. 설정에서 TTBKey를 입력해주세요."
@@ -67,6 +68,7 @@ class ScannerViewModel(application: Application) : AndroidViewModel(application)
                     foundBook = item
                 )
             } else {
+                lastScannedIsbn = ""
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
                     error = "도서 정보를 찾을 수 없습니다."

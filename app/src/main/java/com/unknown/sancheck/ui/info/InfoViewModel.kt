@@ -30,14 +30,15 @@ class InfoViewModel(application: Application) : AndroidViewModel(application) {
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0)
 
     // This year's books
-    private val startOfYear: Long = Calendar.getInstance().apply {
-        set(Calendar.MONTH, Calendar.JANUARY)
-        set(Calendar.DAY_OF_MONTH, 1)
-        set(Calendar.HOUR_OF_DAY, 0)
-        set(Calendar.MINUTE, 0)
-        set(Calendar.SECOND, 0)
-        set(Calendar.MILLISECOND, 0)
-    }.timeInMillis
+    private val startOfYear: Long
+        get() = Calendar.getInstance().apply {
+            set(Calendar.MONTH, Calendar.JANUARY)
+            set(Calendar.DAY_OF_MONTH, 1)
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }.timeInMillis
 
     val booksThisYear: StateFlow<List<Book>> = repository.getBooksAddedThisYear(startOfYear)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())

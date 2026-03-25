@@ -16,11 +16,7 @@ class BookDetailViewModel(application: Application) : AndroidViewModel(applicati
     private val _bookId = MutableStateFlow(0L)
 
     val book: StateFlow<Book?> = _bookId.flatMapLatest { id ->
-        if (id > 0) {
-            flow { emit(repository.getBookById(id)) }
-        } else {
-            flowOf(null)
-        }
+        if (id > 0) repository.getBookByIdFlow(id) else flowOf(null)
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 
     val postIts: StateFlow<List<PostIt>> = _bookId.flatMapLatest { id ->
@@ -49,14 +45,14 @@ class BookDetailViewModel(application: Application) : AndroidViewModel(applicati
     fun updateRating(rating: Float) {
         viewModelScope.launch {
             book.value?.let { repository.updateBook(it.copy(rating = rating)) }
-            refreshBook()
+
         }
     }
 
     fun updateMemo(memo: String) {
         viewModelScope.launch {
             book.value?.let { repository.updateBook(it.copy(memo = memo)) }
-            refreshBook()
+
         }
     }
 
@@ -66,28 +62,28 @@ class BookDetailViewModel(application: Application) : AndroidViewModel(applicati
                 val newQty = (it.quantity + delta).coerceAtLeast(1)
                 repository.updateBook(it.copy(quantity = newQty))
             }
-            refreshBook()
+
         }
     }
 
     fun toggleMillie() {
         viewModelScope.launch {
             book.value?.let { repository.updateBook(it.copy(availableOnMillie = !it.availableOnMillie)) }
-            refreshBook()
+
         }
     }
 
     fun toggleWelaaa() {
         viewModelScope.launch {
             book.value?.let { repository.updateBook(it.copy(availableOnWelaaa = !it.availableOnWelaaa)) }
-            refreshBook()
+
         }
     }
 
     fun moveToShelf(shelfId: Long) {
         viewModelScope.launch {
             book.value?.let { repository.updateBook(it.copy(bookshelfId = shelfId)) }
-            refreshBook()
+
         }
     }
 
@@ -140,11 +136,5 @@ class BookDetailViewModel(application: Application) : AndroidViewModel(applicati
 
     fun deleteHashTag(hashTag: HashTag) {
         viewModelScope.launch { repository.deleteHashTag(hashTag) }
-    }
-
-    private fun refreshBook() {
-        val id = _bookId.value
-        _bookId.value = 0
-        _bookId.value = id
     }
 }

@@ -88,7 +88,7 @@ fun InfoScreen(
             }
 
             if (expandedSection == "year") {
-                items(booksThisYear) { book ->
+                items(booksThisYear, key = { it.id }) { book ->
                     BookListItem(book = book, onClick = { onNavigateToDetail(book.id) })
                 }
             }
@@ -102,7 +102,7 @@ fun InfoScreen(
                 StatItem("총 권수", totalBookCount.toString(), onClick = { expandedSection = if (expandedSection == "total") null else "total" })
             }
             if (expandedSection == "total") {
-                items(booksByPubDate) { book ->
+                items(booksByPubDate, key = { it.id }) { book ->
                     BookListItem(book = book, onClick = { onNavigateToDetail(book.id) })
                 }
             }
@@ -129,28 +129,28 @@ fun InfoScreen(
 
             item { StatItem("출간일순", "", onClick = { expandedSection = if (expandedSection == "pubdate") null else "pubdate" }) }
             if (expandedSection == "pubdate") {
-                items(booksByPubDate) { book ->
+                items(booksByPubDate, key = { it.id }) { book ->
                     BookListItem(book = book, subtitle = book.pubDate, onClick = { onNavigateToDetail(book.id) })
                 }
             }
 
             item { StatItem("별점순", "", onClick = { expandedSection = if (expandedSection == "rating") null else "rating" }) }
             if (expandedSection == "rating") {
-                items(booksByRating) { book ->
+                items(booksByRating, key = { it.id }) { book ->
                     BookListItem(book = book, subtitle = "★ ${book.rating}", onClick = { onNavigateToDetail(book.id) })
                 }
             }
 
             item { StatItem("가격순", "", onClick = { expandedSection = if (expandedSection == "price") null else "price" }) }
             if (expandedSection == "price") {
-                items(booksByPrice) { book ->
+                items(booksByPrice, key = { it.id }) { book ->
                     BookListItem(book = book, subtitle = "${book.priceStandard}원", onClick = { onNavigateToDetail(book.id) })
                 }
             }
 
             item { StatItem("쪽수순", "", onClick = { expandedSection = if (expandedSection == "pages") null else "pages" }) }
             if (expandedSection == "pages") {
-                items(booksByPageCount) { book ->
+                items(booksByPageCount, key = { it.id }) { book ->
                     BookListItem(book = book, subtitle = "${book.pageCount}쪽", onClick = { onNavigateToDetail(book.id) })
                 }
             }
@@ -173,7 +173,7 @@ fun InfoScreen(
                     }
                 }
             }
-            items(bookshelves) { shelf ->
+            items(bookshelves, key = { it.id }) { shelf ->
                 Card(modifier = Modifier.fillMaxWidth().padding(vertical = 2.dp)) {
                     Row(modifier = Modifier.padding(12.dp)) {
                         Text(shelf.name, modifier = Modifier.weight(1f))

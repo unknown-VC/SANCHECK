@@ -12,7 +12,7 @@ import androidx.room.PrimaryKey
             entity = Bookshelf::class,
             parentColumns = ["id"],
             childColumns = ["bookshelfId"],
-            onDelete = ForeignKey.SET_DEFAULT
+            onDelete = ForeignKey.RESTRICT
         )
     ],
     indices = [Index("bookshelfId"), Index("isbn13")]

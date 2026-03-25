@@ -140,6 +140,16 @@ fun BookDetailScreen(
                 )
             }
 
+            // Bookshelf
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text("서가: ", style = MaterialTheme.typography.labelLarge)
+                com.unknown.sancheck.ui.components.BookshelfDropdown(
+                    bookshelves = bookshelves,
+                    selectedShelfId = currentBook.bookshelfId,
+                    onShelfSelected = { viewModel.moveToShelf(it) }
+                )
+            }
+
             // Quantity
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text("수량: ", style = MaterialTheme.typography.labelLarge)

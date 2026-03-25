@@ -9,9 +9,6 @@ import com.unknown.sancheck.data.local.dao.AnnotationDao
 import com.unknown.sancheck.data.local.dao.BookDao
 import com.unknown.sancheck.data.local.dao.BookshelfDao
 import com.unknown.sancheck.data.local.entity.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @Database(
     entities = [
@@ -45,15 +42,9 @@ abstract class AppDatabase : RoomDatabase() {
                     .addCallback(object : Callback() {
                         override fun onCreate(db: SupportSQLiteDatabase) {
                             super.onCreate(db)
-                            // Insert default bookshelf "모든 책"
-                            CoroutineScope(Dispatchers.IO).launch {
-                                INSTANCE?.bookshelfDao()?.insertBookshelf(
-                                    Bookshelf(id = 1, name = "모든 책", colorIndex = 0)
-                                )
-                            }
+                            db.execSQL("INSERT OR IGNORE INTO bookshelves (id, name, colorIndex) VALUES (1, '모든 책', 0)")
                         }
                     })
-                    .fallbackToDestructiveMigration()
                     .build()
                 INSTANCE = instance
                 instance

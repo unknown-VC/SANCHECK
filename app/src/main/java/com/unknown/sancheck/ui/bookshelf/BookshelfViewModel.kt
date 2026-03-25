@@ -61,6 +61,7 @@ class BookshelfViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun selectShelf(shelfId: Long) {
         _selectedShelfId.value = shelfId
+        _searchQuery.value = ""
         prefsManager.currentShelfId = shelfId
     }
 

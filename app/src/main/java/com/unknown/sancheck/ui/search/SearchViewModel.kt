@@ -31,6 +31,13 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     private val _uiState = MutableStateFlow(SearchUiState())
     val uiState: StateFlow<SearchUiState> = _uiState
 
+    private val _searchText = MutableStateFlow("")
+    val searchText: StateFlow<String> = _searchText
+
+    fun updateSearchText(text: String) {
+        _searchText.value = text
+    }
+
     fun search(query: String) {
         if (query.isBlank()) return
         _uiState.value = _uiState.value.copy(query = query, isLoading = true, error = null)

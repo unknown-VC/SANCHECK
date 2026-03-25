@@ -12,6 +12,8 @@ import com.unknown.sancheck.ui.components.ShelfRow
 fun SpineView(
     books: List<Book>,
     onBookClick: (Book) -> Unit,
+    editMode: Boolean = false,
+    onDeleteBook: ((Book) -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     // Split books into rows of ~8 books per shelf
@@ -28,7 +30,13 @@ fun SpineView(
         ) { index ->
             ShelfRow(
                 books = shelves.getOrElse(index) { emptyList() },
-                onBookClick = onBookClick,
+                onBookClick = { book ->
+                    if (editMode && onDeleteBook != null) {
+                        onDeleteBook(book)
+                    } else {
+                        onBookClick(book)
+                    }
+                },
                 modifier = Modifier.padding(vertical = 4.dp)
             )
         }

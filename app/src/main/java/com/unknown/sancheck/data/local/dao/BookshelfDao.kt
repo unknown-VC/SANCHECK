@@ -22,6 +22,9 @@ interface BookshelfDao {
     @Delete
     suspend fun deleteBookshelf(bookshelf: Bookshelf)
 
+    @Query("SELECT COUNT(*) FROM books WHERE bookshelfId = :shelfId")
+    suspend fun getBookCountForShelf(shelfId: Long): Int
+
     @Query("SELECT COUNT(*) FROM bookshelves")
     suspend fun getCount(): Int
 }

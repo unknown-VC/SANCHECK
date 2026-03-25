@@ -32,7 +32,7 @@ fun SearchScreen(
     viewModel: SearchViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    var searchText by remember { mutableStateOf("") }
+    val searchText by viewModel.searchText.collectAsState()
 
     LaunchedEffect(uiState.savedBookId) {
         uiState.savedBookId?.let { onNavigateToDetail(it) }
@@ -58,7 +58,7 @@ fun SearchScreen(
             // Search bar
             OutlinedTextField(
                 value = searchText,
-                onValueChange = { searchText = it },
+                onValueChange = { viewModel.updateSearchText(it) },
                 placeholder = { Text("제목, 저자, ISBN 검색") },
                 modifier = Modifier
                     .fillMaxWidth()

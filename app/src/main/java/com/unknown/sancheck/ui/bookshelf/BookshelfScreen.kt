@@ -34,6 +34,7 @@ fun BookshelfScreen(
 
     var showAddDialog by remember { mutableStateOf(false) }
     var showSearchBar by remember { mutableStateOf(false) }
+    var bookToDelete by remember { mutableStateOf<com.unknown.sancheck.data.local.entity.Book?>(null) }
 
     Scaffold(
         topBar = {
@@ -169,11 +170,15 @@ fun BookshelfScreen(
                 when (viewMode) {
                     0 -> SpineView(
                         books = books,
-                        onBookClick = { onNavigateToDetail(it.id) }
+                        onBookClick = { onNavigateToDetail(it.id) },
+                        editMode = editMode,
+                        onDeleteBook = { bookToDelete = it }
                     )
                     1 -> CoverGridView(
                         books = books,
-                        onBookClick = { onNavigateToDetail(it.id) }
+                        onBookClick = { onNavigateToDetail(it.id) },
+                        editMode = editMode,
+                        onDeleteBook = { bookToDelete = it }
                     )
                 }
             }
@@ -186,6 +191,23 @@ fun BookshelfScreen(
             onScanBarcode = onNavigateToScanner,
             onInternetSearch = onNavigateToSearch,
             onManualInput = onNavigateToManualAdd
+        )
+    }
+
+    bookToDelete?.let { book ->
+        AlertDialog(
+            onDismissRequest = { bookToDelete = null },
+            title = { Text("도서 삭제") },
+            text = { Text("\"${book.title}\"을(를) 삭제하시겠습니까?") },
+            confirmButton = {
+                TextButton(onClick = {
+                    viewModel.deleteBook(book)
+                    bookToDelete = null
+                }) { Text("삭제", color = MaterialTheme.colorScheme.error) }
+            },
+            dismissButton = {
+                TextButton(onClick = { bookToDelete = null }) { Text("취소") }
+            }
         )
     }
 }

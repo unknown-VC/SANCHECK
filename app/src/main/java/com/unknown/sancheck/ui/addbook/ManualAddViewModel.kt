@@ -51,7 +51,7 @@ class ManualAddViewModel(application: Application) : AndroidViewModel(applicatio
                 priceStandard = price.toIntOrNull() ?: 0,
                 isbn13 = isbn.trim(),
                 coverUrl = coverUrl.trim(),
-                bookshelfId = if (bookshelfId > 0) bookshelfId else 1
+                bookshelfId = if (bookshelfId > 0) bookshelfId else prefsManager.currentShelfId.takeIf { it > 0 } ?: 1
             )
             val id = repository.insertBook(book)
             _savedBookId.value = id

@@ -18,6 +18,7 @@ class BookRepository(
     fun getAllBooks(): Flow<List<Book>> = bookDao.getAllBooks()
     fun getBooksByShelf(shelfId: Long): Flow<List<Book>> = bookDao.getBooksByShelf(shelfId)
     suspend fun getBookById(bookId: Long): Book? = bookDao.getBookById(bookId)
+    fun getBookByIdFlow(bookId: Long): Flow<Book?> = bookDao.getBookByIdFlow(bookId)
     suspend fun getBookByIsbn(isbn: String): Book? = bookDao.getBookByIsbn(isbn)
     fun searchBooks(query: String): Flow<List<Book>> = bookDao.searchBooks(query)
 
@@ -103,18 +104,22 @@ class BookRepository(
 
     // Convert AladinItem to Book entity
     fun aladinItemToBook(item: AladinItem, bookshelfId: Long = 1): Book {
-        // Parse author and translator from author field
-        val authorParts = item.author.split(" (지은이)").first().trim()
-        val translatorMatch = Regex("\\(옮긴이\\)").find(item.author)
-        val translator = if (translatorMatch != null) {
-            item.author.substringAfter("(지은이)").substringBefore("(옮긴이)").trim().trimStart(',').trim()
-        } else ""
+        // Parse author and translator using regex for robustness
+        val authorRegex = Regex("^(.+?)\\s*\\(지은이\\)")
+        val translatorRegex = Regex("\\(지은이\\)[,\\s]*(.+?)\\s*\\(옮긴이\\)")
+
+        val authorMatch = authorRegex.find(item.author)
+        val author = authorMatch?.groupValues?.get(1)?.trim()
+            ?: item.author.split("(").first().trim()
+
+        val translatorMatch = translatorRegex.find(item.author)
+        val translator = translatorMatch?.groupValues?.get(1)?.trim() ?: ""
 
         return Book(
             isbn13 = item.isbn13.ifEmpty { item.isbn },
             title = item.title,
             subtitle = item.subInfo?.subTitle ?: "",
-            author = authorParts,
+            author = author,
             translator = translator,
             publisher = item.publisher,
             pubDate = item.pubDate,
